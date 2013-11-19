@@ -1,0 +1,49 @@
+OASISFormat: 0.3
+Name:        ocaml-tokyocabinet
+Version:     999
+Synopsis:    OCaml bindings for TokyoCabinet using ctypes
+Authors:     Nicolas Trangez
+Copyrights:  (C) 2013 Nicolas Trangez
+License:     LGPL-2.1 with OCaml linking exception
+Plugins:     META (0.3), StdFiles (0.3), DevFiles (0.3)
+BuildTools:  ocamlbuild
+Homepage:    http://github.com/NicolasT/ocaml-tokyocabinet
+
+Library tokyocabinet
+  Path:         src
+  Modules:      TokyoCabinet
+  BuildDepends: tokyocabinet.internal
+  FindlibName:  tokyocabinet
+  
+Library "tokyocabinet_internal"
+  Path:            src/internal
+  Modules:         Tcbdb,
+                   Tcutil,
+                   Error,
+                   BDB
+  InternalModules: Ctypes_extra
+  Pack:            true
+  FindlibParent:   tokyocabinet
+  FindlibName:     internal
+  CCLib:           -ltokyocabinet
+  BuildDepends:    ctypes,
+                   ctypes.foreign
+  
+Executable "test_bdb"
+  Build$:         flag(tests)
+  Install:        false
+  Path:           test
+  MainIs:         test_bdb.ml
+  CompiledObject: native
+  BuildDepends:   tokyocabinet
+
+Test "test-bdb"
+  Command: ./test_bdb.native
+  
+SourceRepository head
+  Type:     git
+  Location: git://github.com/NicolasT/ocaml-tokyocabinet.git
+  Branch:   master
+  Browser:  http://github.com/NicolasT/ocaml-tokyocabinet/tree/master
+  
+
